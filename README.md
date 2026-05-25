@@ -22,6 +22,8 @@ SouthParkFrameWork is a simple modding and research framework for South Park: Th
 
 ## Disclaimer
 
+And Yes AI was helped with this project so what deal with it if you dont like it then dont use the Mod
+
 This project is for research, learning, and modding purposes only.
 
 No game files or copyrighted assets are included.
