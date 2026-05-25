@@ -38,6 +38,8 @@ No copyrighted game files, assets, or proprietary content are included or distri
 
 WE DO NOT CONDONE PIRACY.
 
+We respect the original developers, publishers, and rights holders of the game and its intellectual property. If any owner wishes to contact us regarding content or requests removal/takedown of material related to their intellectual property, we will respectfully comply.
+
 ## Status
 
 Work in progress.
