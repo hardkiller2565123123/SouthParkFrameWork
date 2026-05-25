@@ -42,7 +42,7 @@ Built for developers, reverse engineers, modders, and preservation enthusiasts w
 
 ## Disclaimer
 
-And yes, AI was used to help with parts of this project. If you do not like that, then simply do not use the mod.
+yes, AI was used to help with parts of this project. If you do not like that, then simply do not use the mod.
 
 This project uses a proxy DLL system. In simple terms, it uses a custom `steam_api.dll` loader that forwards to the original game DLL. Because of this, owning a legitimate copy of the game is required.
 
