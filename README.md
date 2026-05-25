@@ -2,23 +2,43 @@
 
 ![South Park Banner](https://etgeekera.com/wp-content/uploads/2013/05/south-park-the-stick-of-truth-banner.jpg)
 
-SouthParkFrameWork is a simple modding and research framework for South Park: The Stick of Truth.
+SouthParkFrameWork is a lightweight modding, research, and experimentation framework for South Park: The Stick of Truth.
+
+The goal of this project is to provide a clean base for:
+- DLL modding
+- Hooking
+- Debug logging
+- Runtime patching
+- Overlay systems
+- Research tools
+- Experimental gameplay modifications
+
+Built for developers, reverse engineers, modders, and preservation enthusiasts who want to learn more about how this amazing game works internally.
+
+---
 
 ## Features
 
 - DLL framework
-- Debug logging
 - DirectX9 overlay
+- Debug logging system
 - Hooking support
 - Runtime patching
 - Modding tools
+- Expandable framework structure
+- MinHook-ready architecture
+
+---
 
 ## Requirements
 
 - Windows 10 / 11
 - Visual Studio
 - DirectX 9 SDK
+- x86 Build Configuration
 - Legally owned copy of the game
+
+---
 
 ## Disclaimer
 
@@ -38,7 +58,11 @@ No copyrighted game files, assets, or proprietary content are included or distri
 
 WE DO NOT CONDONE PIRACY.
 
-We respect the original developers, publishers, and rights holders of the game and its intellectual property. If any owner wishes to contact us regarding content or requests removal/takedown of material related to their intellectual property, we will respectfully comply.
+We deeply respect the original developers, publishers, artists, writers, and everyone involved in creating South Park: The Stick of Truth and the South Park franchise as a whole. This framework exists because of appreciation for this amazing game and the work that went into creating it.
+
+If any rights holder or intellectual property owner wishes to contact us regarding content, removal requests, or takedown concerns, we will respectfully comply.
+
+---
 
 ## Status
 
