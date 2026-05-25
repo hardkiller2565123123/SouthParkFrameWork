@@ -22,15 +22,21 @@ SouthParkFrameWork is a simple modding and research framework for South Park: Th
 
 ## Disclaimer
 
-And Yes AI was helped with this project so what deal with it if you dont like it then dont use the Mod.
+And yes, AI was used to help with parts of this project. If you do not like that, then simply do not use the mod.
 
-Also this mod uses a proxy dll. In Normal words that means it uses a dummy steam_api.dll to load the original one so owning the game is a requirement. THIS WILL NEVER CHANGE
+This project uses a proxy DLL system. In simple terms, it uses a custom `steam_api.dll` loader that forwards to the original game DLL. Because of this, owning a legitimate copy of the game is required.
 
-This project is for research, learning, and modding purposes only.
+THIS WILL NEVER CHANGE.
 
-No game files or copyrighted assets are included.
+This project exists for:
+- Research
+- Learning
+- Preservation
+- Modding purposes
 
-WE DO NOT CONDONE PIRACY
+No copyrighted game files, assets, or proprietary content are included or distributed with this project.
+
+WE DO NOT CONDONE PIRACY.
 
 ## Status
 
