@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Framework/Framework.vcxproj" Id="b04bf8a7-7036-492d-8017-d3305ff22f27" />
+  <Project Path="Logger/Logger.vcxproj" Id="326a5407-42ac-470f-a9e8-6f072c22cca4" />
+  <Project Path="steam_api/steam_api.vcxproj" Id="00745ce3-7cbc-4fe3-bafa-d3b3504dba99" />
+</Solution>

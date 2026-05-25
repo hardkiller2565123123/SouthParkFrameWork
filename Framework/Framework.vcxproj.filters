@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Patches">
+      <UniqueIdentifier>{59df5fee-9616-4487-abae-5fcfc6fce8ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{ff8e92eb-27f9-4caa-bbc2-55ef2ea61820}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="overlay">
+      <UniqueIdentifier>{375214e9-ee09-46ad-b7f9-b2964c4ea608}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MinHook.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HookManager.h">
+      <Filter>Patches</Filter>
+    </ClInclude>
+    <ClInclude Include="PatchManager.h">
+      <Filter>Patches</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="Overlay.h">
+      <Filter>overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowManager.h">
+      <Filter>overlay</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="MinHook.x86.lib">
+      <Filter>Resource Files</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="framework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HookManager.cpp">
+      <Filter>Patches</Filter>
+    </ClCompile>
+    <ClCompile Include="PatchManager.cpp">
+      <Filter>Patches</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay.cpp">
+      <Filter>overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowManager.cpp">
+      <Filter>overlay</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
