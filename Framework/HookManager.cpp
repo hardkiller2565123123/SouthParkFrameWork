@@ -147,6 +147,17 @@ static IDirect3D9* WINAPI Hooked_Direct3DCreate9(UINT sdk)
     return d3d;
 }
 
+typedef int (WINAPI* ShowCursor_t)(BOOL bShow);
+static ShowCursor_t Original_ShowCursor = NULL;
+
+static int WINAPI Hooked_ShowCursor(BOOL bShow)
+{
+    if (Overlay_IsMenuOpen())
+        return Original_ShowCursor(TRUE);
+
+    return Original_ShowCursor(bShow);
+}
+
 void HookManager_Init()
 {
     Framework_Log("[HOOK] HookManager initialized");
@@ -168,6 +179,21 @@ void HookManager_Init()
     {
         Framework_Log("[HOOK] Direct3DCreate9 missing");
         return;
+    }
+
+    void* showCursor = GetProcAddress(GetModuleHandleA("user32.dll"), "ShowCursor");
+
+    if (showCursor)
+    {
+        if (MH_CreateHook(
+            showCursor,
+            &Hooked_ShowCursor,
+            reinterpret_cast<void**>(&Original_ShowCursor)
+        ) == MH_OK)
+        {
+            MH_EnableHook(showCursor);
+            Framework_Log("[HOOK] ShowCursor hooked");
+        }
     }
 
     if (MH_CreateHook(

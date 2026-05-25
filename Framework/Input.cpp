@@ -1,7 +1,6 @@
 #include "Input.h"
 #include "framework.h"
 #include "Overlay.h"
-#include "WindowManager.h"
 
 #include <windows.h>
 
@@ -12,8 +11,7 @@ void Input_Init()
     ZeroMemory(g_PreviousKeys, sizeof(g_PreviousKeys));
 
     Framework_Log("[INPUT] Input system initialized");
-    Framework_Log("[INPUT] F1 = overlay toggle");
-    Framework_Log("[INPUT] F11 = borderless fullscreen");
+    Framework_Log("[INPUT] F1 = overlay menu");
 }
 
 bool Input_IsKeyDown(int vk)
@@ -34,12 +32,17 @@ bool Input_IsKeyPressed(int vk)
 void Input_Update()
 {
     if (Input_IsKeyPressed(VK_F1))
-    {
-        Overlay_Toggle();
-    }
+        Overlay_ToggleMenu();
 
-    if (Input_IsKeyPressed(VK_F11))
+    if (Overlay_IsMenuOpen())
     {
-        WindowManager_EnableBorderless();
+        if (Input_IsKeyPressed(VK_UP))
+            Overlay_MenuUp();
+
+        if (Input_IsKeyPressed(VK_DOWN))
+            Overlay_MenuDown();
+
+        if (Input_IsKeyPressed(VK_RETURN))
+            Overlay_MenuSelect();
     }
 }

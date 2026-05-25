@@ -5,6 +5,13 @@
 #include "WindowManager.h"
 #include "Overlay.h"
 #include "MinHook.h"
+#include "Config.h"
+#include "ModLoader.h"
+#include "Notification.h"
+#include "PatchToggles.h"
+#include "PatchFileSystem.h"
+#include "VirtualFileSystem.h"
+
 
 static HMODULE g_Logger = NULL;
 
@@ -78,6 +85,12 @@ DWORD WINAPI Framework_MainThread(LPVOID)
     HookManager_Init();
     Input_Init();
     WindowManager_Init();
+    Config_Init();
+    Notification_Init();
+    PatchToggles_Init();
+    ModLoader_Init();
+    PatchFileSystem_Init();
+    VFS_Init();
 
     if (MH_EnableHook(MH_ALL_HOOKS) == MH_OK)
         Framework_Log("[FRAMEWORK] Hooks enabled");
@@ -85,6 +98,9 @@ DWORD WINAPI Framework_MainThread(LPVOID)
         Framework_Log("[FRAMEWORK] Hook enable failed");
 
     Framework_Log("[FRAMEWORK] Runtime systems initialized");
+
+    if (Config_GetBool("Mods", "Enabled", true))
+        ModLoader_LoadAll();
 
     while (true)
     {
@@ -114,7 +130,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID)
     }
 
     if (reason == DLL_PROCESS_DETACH)
-    {
+    {   
+        ModLoader_UnloadAll();
         Overlay_Shutdown();
 
         MH_DisableHook(MH_ALL_HOOKS);

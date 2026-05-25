@@ -18,6 +18,9 @@
     <Filter Include="overlay">
       <UniqueIdentifier>{375214e9-ee09-46ad-b7f9-b2964c4ea608}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mod">
+      <UniqueIdentifier>{93bbdae7-d5f5-4c0a-a396-7af7aaa4cdaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MinHook.h">
@@ -40,6 +43,24 @@
     </ClInclude>
     <ClInclude Include="WindowManager.h">
       <Filter>overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="Notification.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="PatchToggles.h">
+      <Filter>Patches</Filter>
+    </ClInclude>
+    <ClInclude Include="ModLoader.h">
+      <Filter>mod</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualFileSystem.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="PatchFileSystem.h">
+      <Filter>Patches</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +86,24 @@
     </ClCompile>
     <ClCompile Include="WindowManager.cpp">
       <Filter>overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="Notification.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="PatchToggles.cpp">
+      <Filter>Patches</Filter>
+    </ClCompile>
+    <ClCompile Include="ModLoader.cpp">
+      <Filter>mod</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualFileSystem.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="PatchFileSystem.cpp">
+      <Filter>Patches</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

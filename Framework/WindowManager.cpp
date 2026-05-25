@@ -1,83 +1,104 @@
 #include "WindowManager.h"
 #include "framework.h"
 
+#include <windows.h>
+
 static HWND g_GameWindow = NULL;
 
-static BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM)
-{
-    DWORD pid = 0;
-    GetWindowThreadProcessId(hwnd, &pid);
+static LONG g_OriginalStyle = 0;
+static RECT g_OriginalRect = { 0 };
 
-    if (pid != GetCurrentProcessId())
-        return TRUE;
-
-    if (!IsWindowVisible(hwnd))
-        return TRUE;
-
-    char title[256];
-    GetWindowTextA(hwnd, title, sizeof(title));
-
-    if (strlen(title) <= 0)
-        return TRUE;
-
-    g_GameWindow = hwnd;
-    return FALSE;
-}
-
-static HWND FindGameWindow()
-{
-    g_GameWindow = NULL;
-    EnumWindows(EnumWindowsProc, 0);
-    return g_GameWindow;
-}
-
-bool WindowManager_EnableBorderless()
-{
-    HWND hwnd = FindGameWindow();
-
-    if (!hwnd)
-    {
-        Framework_Log("[WINDOW] Game window not found");
-        return false;
-    }
-
-    LONG style = GetWindowLongA(hwnd, GWL_STYLE);
-    LONG exStyle = GetWindowLongA(hwnd, GWL_EXSTYLE);
-
-    style &= ~WS_CAPTION;
-    style &= ~WS_THICKFRAME;
-    style &= ~WS_MINIMIZEBOX;
-    style &= ~WS_MAXIMIZEBOX;
-    style &= ~WS_SYSMENU;
-
-    exStyle &= ~WS_EX_DLGMODALFRAME;
-    exStyle &= ~WS_EX_CLIENTEDGE;
-    exStyle &= ~WS_EX_STATICEDGE;
-
-    SetWindowLongA(hwnd, GWL_STYLE, style);
-    SetWindowLongA(hwnd, GWL_EXSTYLE, exStyle);
-
-    SetWindowPos(
-        hwnd,
-        HWND_TOP,
-        0,
-        0,
-        GetSystemMetrics(SM_CXSCREEN),
-        GetSystemMetrics(SM_CYSCREEN),
-        SWP_FRAMECHANGED | SWP_SHOWWINDOW
-    );
-
-    Framework_Log("[WINDOW] Borderless fullscreen applied");
-    return true;
-}
+static bool g_NoBorderEnabled = false;
 
 void WindowManager_Init()
 {
     Framework_Log("[WINDOW] WindowManager initialized");
-    Framework_Log("[WINDOW] F11 = borderless fullscreen");
 }
 
 void WindowManager_Update()
 {
-    // Do not auto-apply. Auto borderless was causing crash.
+    // reserved for future updates
+}
+
+bool WindowManager_EnableNoBorder()
+{
+    if (g_NoBorderEnabled)
+        return true;
+
+    g_GameWindow = GetForegroundWindow();
+
+    if (!g_GameWindow)
+    {
+        Framework_Log("[WINDOW] Failed to find game window");
+        return false;
+    }
+
+    g_OriginalStyle =
+        GetWindowLong(g_GameWindow, GWL_STYLE);
+
+    GetWindowRect(
+        g_GameWindow,
+        &g_OriginalRect
+    );
+
+    SetWindowLong(
+        g_GameWindow,
+        GWL_STYLE,
+        g_OriginalStyle & ~(WS_CAPTION | WS_THICKFRAME)
+    );
+
+    MONITORINFO mi;
+    mi.cbSize = sizeof(mi);
+
+    GetMonitorInfo(
+        MonitorFromWindow(
+            g_GameWindow,
+            MONITOR_DEFAULTTOPRIMARY
+        ),
+        &mi
+    );
+
+    SetWindowPos(
+        g_GameWindow,
+        HWND_TOP,
+        mi.rcMonitor.left,
+        mi.rcMonitor.top,
+        mi.rcMonitor.right - mi.rcMonitor.left,
+        mi.rcMonitor.bottom - mi.rcMonitor.top,
+        SWP_FRAMECHANGED | SWP_SHOWWINDOW
+    );
+
+    g_NoBorderEnabled = true;
+
+    Framework_Log("[WINDOW] No border enabled");
+
+    return true;
+}
+
+bool WindowManager_RestoreWindow()
+{
+    if (!g_GameWindow)
+        return false;
+
+    SetWindowLong(
+        g_GameWindow,
+        GWL_STYLE,
+        g_OriginalStyle
+    );
+
+    SetWindowPos(
+        g_GameWindow,
+        NULL,
+        g_OriginalRect.left,
+        g_OriginalRect.top,
+        g_OriginalRect.right - g_OriginalRect.left,
+        g_OriginalRect.bottom - g_OriginalRect.top,
+        SWP_FRAMECHANGED | SWP_SHOWWINDOW
+    );
+
+    g_NoBorderEnabled = false;
+
+    Framework_Log("[WINDOW] Window restored");
+
+    return true;
 }

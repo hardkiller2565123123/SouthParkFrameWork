@@ -175,23 +175,35 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="HookManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="MinHook.h" />
+    <ClInclude Include="ModLoader.h" />
+    <ClInclude Include="Notification.h" />
     <ClInclude Include="Overlay.h" />
+    <ClInclude Include="PatchFileSystem.h" />
     <ClInclude Include="PatchManager.h" />
+    <ClInclude Include="PatchToggles.h" />
+    <ClInclude Include="VirtualFileSystem.h" />
     <ClInclude Include="WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="MinHook.x86.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="framework.cpp" />
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="ModLoader.cpp" />
+    <ClCompile Include="Notification.cpp" />
     <ClCompile Include="Overlay.cpp" />
+    <ClCompile Include="PatchFileSystem.cpp" />
     <ClCompile Include="PatchManager.cpp" />
+    <ClCompile Include="PatchToggles.cpp" />
+    <ClCompile Include="VirtualFileSystem.cpp" />
     <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

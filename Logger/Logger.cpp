@@ -14,7 +14,6 @@ struct RuntimeLine
 static CRITICAL_SECTION g_Lock;
 static bool g_Ready = false;
 static bool g_HasConsole = false;
-static bool g_ConsoleReady = false;
 
 static std::vector<RuntimeLine> g_Lines;
 
@@ -81,7 +80,6 @@ static void SetTitleColor()
     SetConsoleTextAttribute(
         out,
         FOREGROUND_GREEN |
-        FOREGROUND_BLUE |
         FOREGROUND_INTENSITY
     );
 }
@@ -108,23 +106,14 @@ static void SetStatusColor(bool success)
     }
 }
 
-static void PrintRuntimeLine(const char* text, WORD color)
+static void PrintRuntimeLine(const char* text, bool success)
 {
-    if (!g_ConsoleReady)
+    if (!g_HasConsole || !text)
         return;
 
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    SetConsoleTextAttribute(hConsole, color);
-
+    SetStatusColor(success);
     printf("%s\n", text);
-
-    SetConsoleTextAttribute(
-        hConsole,
-        FOREGROUND_RED |
-        FOREGROUND_GREEN |
-        FOREGROUND_BLUE
-    );
+    SetNormalColor();
 }
 
 static void AddRuntimeLine(const char* type, const char* name, bool success)
@@ -156,6 +145,41 @@ static void AddRuntimeLine(const char* type, const char* name, bool success)
     PrintRuntimeLine(buffer, success);
 }
 
+static BOOL WINAPI ConsoleCtrlHandler(DWORD ctrlType)
+{
+    if (
+        ctrlType == CTRL_CLOSE_EVENT ||
+        ctrlType == CTRL_C_EVENT ||
+        ctrlType == CTRL_BREAK_EVENT ||
+        ctrlType == CTRL_LOGOFF_EVENT ||
+        ctrlType == CTRL_SHUTDOWN_EVENT
+        )
+    {
+        ExitProcess(0);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static DWORD WINAPI ConsoleWatchThread(LPVOID)
+{
+    while (true)
+    {
+        HWND hwnd = GetConsoleWindow();
+
+        if (!hwnd || !IsWindow(hwnd))
+        {
+            ExitProcess(0);
+            return 0;
+        }
+
+        Sleep(250);
+    }
+
+    return 0;
+}
+
 static void SetupConsole()
 {
     AllocConsole();
@@ -166,33 +190,38 @@ static void SetupConsole()
     freopen_s(&f, "CONOUT$", "w", stderr);
     freopen_s(&f, "CONIN$", "r", stdin);
 
+    SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE);
     SetConsoleTitleA("SouthParkFrameWork");
 
     HWND hwnd = GetConsoleWindow();
 
-    LONG style = GetWindowLong(hwnd, GWL_STYLE);
+    if (hwnd)
+    {
+        LONG style = GetWindowLong(hwnd, GWL_STYLE);
 
-    style &= ~WS_MAXIMIZEBOX;
-    style &= ~WS_SIZEBOX;
+        style &= ~WS_MAXIMIZEBOX;
+        style &= ~WS_SIZEBOX;
 
-    SetWindowLong(hwnd, GWL_STYLE, style);
+        SetWindowLong(hwnd, GWL_STYLE, style);
 
-    MoveWindow(hwnd, 80, 80, 700, 800, TRUE);
+        MoveWindow(hwnd, 80, 80, 700, 800, TRUE);
+    }
 
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetNormalColor();
 
-    CONSOLE_SCREEN_BUFFER_INFOEX info = {};
-    info.cbSize = sizeof(info);
+    HANDLE thread = CreateThread(
+        NULL,
+        0,
+        ConsoleWatchThread,
+        NULL,
+        0,
+        NULL
+    );
 
-    GetConsoleScreenBufferInfoEx(hConsole, &info);
+    if (thread)
+        CloseHandle(thread);
 
-    info.ColorTable[0] = RGB(10, 10, 10);
-
-    SetConsoleScreenBufferInfoEx(hConsole, &info);
-
-    system("cls");
-
-    g_ConsoleReady = true;
+    g_HasConsole = true;
 }
 
 extern "C" __declspec(dllexport)
@@ -232,7 +261,6 @@ void __cdecl Logger_Shutdown()
     LeaveCriticalSection(&g_Lock);
 
     DeleteCriticalSection(&g_Lock);
-
     g_Ready = false;
 }
 
@@ -246,6 +274,14 @@ void __cdecl Logger_Log(const char* text)
 
     WriteLogLine(text);
 
+    bool isFailure =
+        strstr(text, "[ERROR]") ||
+        strstr(text, "[MISSING]") ||
+        strstr(text, "[REAL CRASH]") ||
+        strstr(text, "failed") ||
+        strstr(text, "FAILED") ||
+        strstr(text, "Failed");
+
     if (strstr(text, "Loaded SteamOnline.dll"))
     {
         AddRuntimeLine("DLL", "SteamOnline.dll", true);
@@ -253,6 +289,14 @@ void __cdecl Logger_Log(const char* text)
     else if (strstr(text, "Failed to load SteamOnline.dll"))
     {
         AddRuntimeLine("DLL", "SteamOnline.dll", false);
+    }
+    else if (strstr(text, "Framework.dll loaded"))
+    {
+        AddRuntimeLine("DLL", "Framework.dll", true);
+    }
+    else if (strstr(text, "Framework.dll failed"))
+    {
+        AddRuntimeLine("DLL", "Framework.dll", false);
     }
     else if (strstr(text, "g_pSteamClientGameServer linked"))
     {
@@ -275,7 +319,7 @@ void __cdecl Logger_Log(const char* text)
         strstr(text, "[REAL CRASH]")
         )
     {
-        PrintRuntimeLine(text, true);
+        PrintRuntimeLine(text, !isFailure);
     }
 
     LeaveCriticalSection(&g_Lock);
